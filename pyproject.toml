@@ -1,0 +1,50 @@
+[build-system]
+requires = ["uv_build>=0.8.15,<0.9.0"]
+build-backend = "uv_build"
+
+[project]
+name = "dm-mcp"
+version = "2.0.4"
+description = "Explore Dameng database to discover schemas and tables, inspect structures and map relationships"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "qyue", email = "gcluowenqiang@example.com"}
+]
+keywords = ["mcp", "dameng", "database", "cursor", "model-context-protocol", "smithery"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "mcp>=1.15.0",
+    "smithery>=0.4.2",
+    "uvicorn>=0.27.0",
+    "fastapi>=0.110.0",
+    "dmPython>=2.3.0",
+    "pandas>=2.0.0",
+    "jinja2>=3.1.0",
+    "tabulate>=0.9.0",
+    "openpyxl>=3.1.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Gcluowenqiang/Dm-mcp"
+Repository = "https://github.com/Gcluowenqiang/Dm-mcp"
+Issues = "https://github.com/Gcluowenqiang/Dm-mcp/issues"
+
+[project.scripts]
+dev = "smithery.cli.dev:main"
+playground = "smithery.cli.playground:main"
+
+# Points to your server function
+[tool.smithery] 
+server = "dm_mcp.server:create_server"

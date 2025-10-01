@@ -1,0 +1,23 @@
+# Smithery部署验证文件
+# 此文件用于确认仓库结构正确
+
+## 必需文件清单
+- [x] smithery.yaml (存在)
+- [x] Dockerfile (存在)
+- [x] pyproject.toml (存在)
+- [x] requirements.txt (存在)
+- [x] src/dm_mcp/server.py (存在)
+
+## 配置检查
+Runtime: container
+Dockerfile: ./Dockerfile
+Build Context: .
+Server: dm_mcp.server:create_server
+
+## 版本信息
+Project Version: 2.0.4
+MCP Version: >=1.15.0
+Smithery Version: >=0.4.2
+
+Generated: 2025-10-01
+
