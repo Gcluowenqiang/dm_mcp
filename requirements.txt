@@ -1,11 +1,6 @@
 # MCP服务核心依赖
 mcp>=1.15.0
 
-# Smithery部署依赖
-smithery>=0.4.2
-uvicorn>=0.27.0
-fastapi>=0.110.0
-
 # 达梦数据库驱动
 dmPython>=2.3.0
 

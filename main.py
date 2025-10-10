@@ -938,9 +938,9 @@ async def main():
         logger.error("请检查Cursor MCP配置中的环境变量设置")
         sys.exit(1)
     
-    # 检查是否在HTTP模式下运行（Smithery.ai平台）
+    # 检查是否在HTTP模式下运行
     if os.getenv("MCP_SERVER_MODE") == "http":
-        # HTTP模式 - 用于Smithery.ai平台
+        # HTTP模式
         logger.info("启动HTTP模式MCP服务...")
         fastmcp = FastMCP("dm-mcp")
         

@@ -30,87 +30,6 @@
 
 ## 安装和配置
 
-### 🚀 Smithery.ai 平台快速部署
-
-**推荐方式：** 本MCP服务已针对 [Smithery.ai](https://smithery.ai/) 平台进行优化，支持一键部署。
-
-#### ✨ 部署特性
-- ✅ **会话配置支持**：每个连接可以使用不同的数据库配置
-- ✅ **Python Runtime**：直接运行Python代码，无需Docker容器
-- ✅ **Container Runtime**：可选的Docker容器部署，更灵活
-- ✅ **加密模块兼容**：已解决达梦数据库加密模块加载问题
-- ✅ **健康检查**：内置配置验证和故障诊断
-
-#### 📝 部署步骤
-
-**方式一：使用Smithery CLI（推荐）**
-
-1. 安装Smithery CLI：
-```bash
-npm install -g @smithery/cli
-```
-
-2. 克隆或上传项目到Git仓库（GitHub/GitLab等）
-
-3. 在Smithery.ai平台创建服务器：
-   - 访问 [https://smithery.ai](https://smithery.ai)
-   - 连接您的Git仓库
-   - 选择 `dm-mcp` 项目
-   - Smithery会自动检测配置并部署
-
-4. 配置数据库连接（会话级配置）：
-   - 在连接时通过Smithery界面配置
-   - 每个会话可以连接不同的数据库
-   - 配置参数：
-     - `dameng_host`：数据库服务器地址（必需）
-     - `dameng_port`：数据库端口（默认5236）
-     - `dameng_username`：数据库用户名（必需）
-     - `dameng_password`：数据库密码（必需）
-     - `dameng_database`：数据库名称（默认DAMENG）
-     - `security_mode`：安全模式（readonly/limited_write/full_access，默认readonly）
-     - `allowed_schemas`：允许访问的模式（默认*）
-     - `max_result_rows`：最大返回行数（默认1000）
-
-**方式二：使用Smithery Deep Link**
-
-分享以下格式的链接给用户：
-```
-https://smithery.ai/server/your-username/dm-mcp
-```
-
-用户点击后可以一键安装到他们的AI客户端。
-
-#### 🔧 高级配置
-
-**自定义Docker部署**
-
-如果需要使用Docker容器部署，可以修改 `smithery.yaml`：
-
-```yaml
-runtime: "container"
-build:
-  dockerfile: "Dockerfile"
-  dockerBuildPath: "."
-startCommand:
-  type: "http"
-  configSchema:
-    # ... 保持现有配置
-```
-
-**生产环境建议**
-
-```yaml
-# 推荐的生产环境配置示例
-dameng_host: "prod-dm.company.com"
-dameng_port: 5236
-dameng_username: "readonly_user"
-dameng_password: "secure_password"
-dameng_database: "PROD_DB"
-security_mode: "readonly"          # 生产环境强烈推荐只读模式
-allowed_schemas: "APP,REPORT"       # 限制访问特定模式
-max_result_rows: 500                # 限制返回行数保护性能
-```
-
 ### 1. 本地安装依赖
 
 ```bash
@@ -349,27 +268,6 @@ print(f"API Level: {dmPython.apilevel}")
 
 ## 错误处理
 
-- **达梦数据库加密模块错误** (Docker/Linux)：
-  ```
-  [CODE:-70089]Encryption module failed to load
-  ```
-  **解决方案**：本项目已针对此问题进行优化：
-  - ✅ **Smithery.ai平台**：已预配置，无需额外操作
-  - ✅ **自建Docker**：使用提供的Dockerfile，已包含必需依赖
-  - ✅ **故障诊断**：检查容器日志中的LD_LIBRARY_PATH配置
-  
-  **手动验证**（如需要）：
-  ```bash
-  # 在容器内检查环境变量
-  echo $LD_LIBRARY_PATH
-  
-  # 检查OpenSSL库
-  ldconfig -p | grep ssl
-  
-  # 验证加密库文件
-  ls -la /usr/lib/x86_64-linux-gnu/libcrypto*
-  ```
-
 - **dmPython DLL 错误** (Windows)：
   ```
   ImportError: DLL load failed while importing dmPython: 找不到指定的模块
@@ -464,7 +362,7 @@ print(f"API Level: {dmPython.apilevel}")
 
 ---
 
-**版本**: 2.0.0  
-**更新时间**: 2025-09-24  
-**设计目标**: 专为达梦数据库和 Cursor MCP 集成优化  
-**基于项目**: kingbase-mcp 
+**版本**: 2.0.4  
+**更新时间**: 2025-10-10  
+**设计目标**: 专为达梦数据库和 Cursor MCP 集成优化，仅支持本地部署  
+**基于项目**: kingbase-mcp

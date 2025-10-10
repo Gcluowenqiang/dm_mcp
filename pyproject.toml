@@ -12,7 +12,7 @@ license = {text = "MIT"}
 authors = [
     {name = "qyue", email = "gcluowenqiang@example.com"}
 ]
-keywords = ["mcp", "dameng", "database", "cursor", "model-context-protocol", "smithery"]
+keywords = ["mcp", "dameng", "database", "cursor", "model-context-protocol"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -22,9 +22,6 @@ classifiers = [
 ]
 dependencies = [
     "mcp>=1.15.0",
-    "smithery>=0.4.2",
-    "uvicorn>=0.27.0",
-    "fastapi>=0.110.0",
     "dmPython>=2.3.0",
     "pandas>=2.0.0",
     "jinja2>=3.1.0",
@@ -41,10 +38,3 @@ Homepage = "https://github.com/Gcluowenqiang/dm_mcp"
 Repository = "https://github.com/Gcluowenqiang/dm_mcp"
 Issues = "https://github.com/Gcluowenqiang/dm_mcp/issues"
 
-[project.scripts]
-dev = "smithery.cli.dev:main"
-playground = "smithery.cli.playground:main"
-
-# Points to your server function
-[tool.smithery] 
-server = "dm_mcp.server:create_server"
