@@ -778,6 +778,11 @@ async def handle_call_tool(name: str, arguments: dict[str, Any] | None) -> list[
                             text=f"❌ 表 '{table_name}' 在模式 '{schema}' 中不存在，无法导出"
                         )]
                     
+                    # 预处理数据，确保字段名兼容性（修复字段信息缺失问题）
+                    structure = normalize_data(structure)
+                    indexes = normalize_data(indexes)
+                    constraints = normalize_data(constraints)
+                    
                     # 创建表结构工作表
                     ws_structure = wb.active
                     ws_structure.title = "表结构"
@@ -797,18 +802,30 @@ async def handle_call_tool(name: str, arguments: dict[str, Any] | None) -> list[
                     for col, header in enumerate(headers, 1):
                         ws_structure.cell(row=6, column=col, value=header)
                     
-                    # 批量写入数据行（不设置样式以提高速度）
+                    # 批量写入数据行（修复字段信息获取问题）
                     for row_idx, col_data in enumerate(structure, 7):
-                        ws_structure.cell(row=row_idx, column=1, value=col_data.get('ordinal_position', ''))
-                        ws_structure.cell(row=row_idx, column=2, value=col_data.get('column_name', ''))
-                        ws_structure.cell(row=row_idx, column=3, value=col_data.get('data_type', ''))
-                        ws_structure.cell(row=row_idx, column=4, value=col_data.get('character_maximum_length', ''))
-                        ws_structure.cell(row=row_idx, column=5, value=col_data.get('numeric_precision', ''))
-                        ws_structure.cell(row=row_idx, column=6, value=col_data.get('numeric_scale', ''))
-                        ws_structure.cell(row=row_idx, column=7, value=col_data.get('is_nullable', ''))
-                        ws_structure.cell(row=row_idx, column=8, value=col_data.get('column_default', ''))
-                        ws_structure.cell(row=row_idx, column=9, value=col_data.get('is_primary_key', ''))
-                        ws_structure.cell(row=row_idx, column=10, value=col_data.get('column_comment', ''))
+                        # 使用兼容的字段名获取方式，确保字段信息完整
+                        ordinal_position = col_data.get('ordinal_position') or col_data.get('ORDINAL_POSITION', '')
+                        column_name = col_data.get('column_name') or col_data.get('COLUMN_NAME', '')
+                        data_type = col_data.get('data_type') or col_data.get('DATA_TYPE', '')
+                        char_length = col_data.get('character_maximum_length') or col_data.get('CHARACTER_MAXIMUM_LENGTH', '')
+                        num_precision = col_data.get('numeric_precision') or col_data.get('NUMERIC_PRECISION', '')
+                        num_scale = col_data.get('numeric_scale') or col_data.get('NUMERIC_SCALE', '')
+                        is_nullable = col_data.get('is_nullable') or col_data.get('IS_NULLABLE', '')
+                        column_default = col_data.get('column_default') or col_data.get('COLUMN_DEFAULT', '')
+                        is_primary_key = col_data.get('is_primary_key') or col_data.get('IS_PRIMARY_KEY', '')
+                        column_comment = col_data.get('column_comment') or col_data.get('COLUMN_COMMENT', '')
+                        
+                        ws_structure.cell(row=row_idx, column=1, value=ordinal_position)
+                        ws_structure.cell(row=row_idx, column=2, value=column_name)
+                        ws_structure.cell(row=row_idx, column=3, value=data_type)
+                        ws_structure.cell(row=row_idx, column=4, value=char_length)
+                        ws_structure.cell(row=row_idx, column=5, value=num_precision)
+                        ws_structure.cell(row=row_idx, column=6, value=num_scale)
+                        ws_structure.cell(row=row_idx, column=7, value=is_nullable)
+                        ws_structure.cell(row=row_idx, column=8, value=column_default)
+                        ws_structure.cell(row=row_idx, column=9, value=is_primary_key)
+                        ws_structure.cell(row=row_idx, column=10, value=column_comment)
                 
                 if export_type in ["data", "both"]:
                     # 导出表数据
